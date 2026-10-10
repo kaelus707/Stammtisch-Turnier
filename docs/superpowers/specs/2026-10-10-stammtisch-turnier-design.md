@@ -168,5 +168,5 @@ Ein GitHub-Actions-Workflow führt bei jedem Push auf `main` Tests und Build aus
 
 ## 10. Offene Punkte vor der Umsetzung
 
-- Das Repo `github.com/kaelus707/Stammtisch-Turnier` ist privat. GitHub Pages für private Repos braucht GitHub Pro; sonst muss das Repo vor dem ersten Deployment öffentlich werden.
+- Das Repo `github.com/kaelus707/Stammtisch-Turnier` wird vor dem ersten Deployment öffentlich gestellt (kein GitHub Pro).
 - Die Sheet-ID wird nachgetragen, sobald der Veranstalter die Vorlage in Google Drive importiert hat. Bis dahin arbeiten Entwicklung und Tests mit lokalen CSV-Fixtures.
