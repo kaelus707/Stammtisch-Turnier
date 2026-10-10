@@ -8,10 +8,11 @@
   <p class="muted empty">Noch keine Tore eingetragen.</p>
 {:else}
   <ol class="card scorers">
+    <li class="head" aria-hidden="true"><span class="rank">Pl.</span><span class="who">Torjäger</span><span>Tore</span></li>
     <!-- ohne Key: gleichnamige Spieler im selben Team dürfen nicht abstürzen -->
     {#each snapshot.scorers as s}
       <li class:podium={s.rank <= 3}>
-        <span class="rank num">{s.rank}.</span>
+        <span class="rank num">{s.rank}</span>
         <span class="who">
           <span class="name">{s.name}</span>
           <span class="muted team">{s.team}</span>
@@ -27,12 +28,14 @@
   .scorers { list-style: none; margin: 16px 0 0; padding: 4px 0; }
   li { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); }
   li:last-child { border-bottom: 0; }
-  .rank { width: 2em; color: var(--text-muted); }
+  .rank { width: 2em; }
   .who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
   .name { font-weight: 600; overflow-wrap: break-word; hyphens: auto; }
   .team { font-size: 0.8rem; }
   .goals { font-size: 1.1rem; font-weight: 800; }
   /* wie die Halbfinal-Markierung in den Tabellen */
   .podium { box-shadow: inset 4px 0 0 var(--accent); }
-  .podium .rank, .podium .goals { color: var(--accent-text); font-weight: 800; }
+  .podium .goals { color: var(--accent-text); }
+  /* wie die Spaltenköpfe der Tabellen */
+  .head { padding-block: 6px; font-family: var(--mono); font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
 </style>
