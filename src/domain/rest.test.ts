@@ -16,10 +16,10 @@ describe('restOverview', () => {
   const rest = restOverview(teams, matches, 1, Array(6).fill(null));
   const by = (n: string) => rest.find((r) => r.team === n)!;
 
-  it('erkennt spielt jetzt, nächstes Spiel und Pause mit Anzahl und Uhrzeit', () => {
+  it('erkennt spielt jetzt, nächstes Spiel und Pause mit Anzahl und Spielnummer', () => {
     expect(by('c')).toMatchObject({ status: 'playing', matchIndex: 1 });
     expect(by('a')).toMatchObject({ status: 'next', matchIndex: 2 });
-    expect(by('b')).toMatchObject({ status: 'resting', gap: 1, matchIndex: 3, startMinutes: 876 });
+    expect(by('b')).toMatchObject({ status: 'resting', gap: 1, matchIndex: 3, nextNr: 4 });
   });
 
   it('sortiert aufsteigend nach dem nächsten Spiel, alphabetisch bei Gleichstand', () => {
@@ -46,14 +46,14 @@ describe('restOverview', () => {
 
 describe('restLabel', () => {
   const e = (over: Partial<RestEntry>): RestEntry => ({
-    team: 't', status: 'resting', gap: 0, matchIndex: null, startMinutes: null, place: null, ...over,
+    team: 't', status: 'resting', gap: 0, matchIndex: null, nextNr: null, place: null, ...over,
   });
 
   it('formuliert die Texte laut Spec', () => {
     expect(restLabel(e({ status: 'playing' }))).toBe('spielt jetzt');
     expect(restLabel(e({ status: 'next' }))).toBe('nächstes Spiel');
-    expect(restLabel(e({ gap: 1, startMinutes: 876 }))).toBe('noch 1 Spiel Pause · 14:36 Uhr');
-    expect(restLabel(e({ gap: 3, startMinutes: 900 }))).toBe('noch 3 Spiele Pause · 15:00 Uhr');
+    expect(restLabel(e({ gap: 1, nextNr: 4 }))).toBe('noch 1 Spiel Pause · Spiel 4');
+    expect(restLabel(e({ gap: 3, nextNr: 6 }))).toBe('noch 3 Spiele Pause · Spiel 6');
     expect(restLabel(e({ gap: 2 }))).toBe('noch 2 Spiele Pause');
     expect(restLabel(e({ status: 'waiting' }))).toBe('wartet auf Finalrunde');
     expect(restLabel(e({ status: 'done', place: 3 }))).toBe('fertig · Platz 3');

@@ -95,7 +95,8 @@ export interface RestEntry {
   /** Anzahl Spiele Pause bis zum nächsten eigenen Spiel (nur bei 'resting' > 0) */
   gap: number;
   matchIndex: number | null;
-  startMinutes: number | null;
+  /** Spielnummer des nächsten eigenen Spiels */
+  nextNr: number | null;
   /** Endplatz, falls bekannt (nur bei 'done') */
   place: number | null;
 }
