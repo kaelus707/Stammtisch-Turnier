@@ -111,6 +111,13 @@ describe('buildWorkbook – Formeln', () => {
     expect([c.get('Spielplan', 'F27'), c.get('Spielplan', 'H27')]).toEqual(['Team B2', 'Team B1']);
   });
 
+  it('zählt ein halb eingetragenes Ergebnis nicht', () => {
+    const wb = buildWorkbook();
+    wb.getWorksheet('Spielplan')!.getCell('I2').value = 3;
+    const rows = calculate(wb).table('Gruppe A', 'A10:J11');
+    expect(rows.map((r) => [r[0], r[2], r[6], r[7], r[8]])).toEqual([['A1', 0, 0, 0, 0], ['A2', 0, 0, 0, 0]]);
+  });
+
   it('sortiert drei gleichstehende Teams über die Mini-Tabelle', () => {
     // A1, A2, A3: je 7 Punkte und +1. Mini-Tabelle: A1 6 Pkt, A2/A3 je 1 Pkt und −1 → mehr Tore: A3 (4) vor A2 (3).
     // Nur nach Toren sortiert wäre die Reihenfolge A3, A2, A1 – der Test erkennt also eine fehlende Mini-Tabelle.

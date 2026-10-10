@@ -96,7 +96,7 @@ function groupSheet(wb: ExcelJS.Workbook, g: Group) {
       const v = pts
         ? `SUMPRODUCT(${home}*(${P.codeB}=${opp})*${DONE}*(3*(${P.goalsA}>${P.goalsB})+(${P.goalsA}=${P.goalsB})))` +
           `+SUMPRODUCT(${away}*(${P.codeA}=${opp})*${DONE}*(3*(${P.goalsB}>${P.goalsA})+(${P.goalsA}=${P.goalsB})))`
-        : `SUMPRODUCT(${home}*(${P.codeB}=${opp})*(${P.goalsA}-${P.goalsB}))+SUMPRODUCT(${away}*(${P.codeA}=${opp})*(${P.goalsB}-${P.goalsA}))`;
+        : `SUMPRODUCT(${home}*(${P.codeB}=${opp})*${DONE}*(${P.goalsA}-${P.goalsB}))+SUMPRODUCT(${away}*(${P.codeA}=${opp})*${DONE}*(${P.goalsB}-${P.goalsA}))`;
       return fx(`(${v})*${tie}`);
     };
     const lot = `INDEX(Teams!$D$2:$D$11,MATCH(${me},${CODES},0))`;
@@ -107,8 +107,8 @@ function groupSheet(wb: ExcelJS.Workbook, g: Group) {
       fx(`SUMPRODUCT(${home}*${DONE}*(${P.goalsA}>${P.goalsB}))+SUMPRODUCT(${away}*${DONE}*(${P.goalsB}>${P.goalsA}))`),
       fx(`SUMPRODUCT((${home}+${away})*${DONE}*(${P.goalsA}=${P.goalsB}))`),
       fx(`C${r}-D${r}-E${r}`),
-      fx(`SUMPRODUCT(${home}*${P.goalsA})+SUMPRODUCT(${away}*${P.goalsB})`),
-      fx(`SUMPRODUCT(${home}*${P.goalsB})+SUMPRODUCT(${away}*${P.goalsA})`),
+      fx(`SUMPRODUCT(${home}*${DONE}*${P.goalsA})+SUMPRODUCT(${away}*${DONE}*${P.goalsB})`),
+      fx(`SUMPRODUCT(${home}*${DONE}*${P.goalsB})+SUMPRODUCT(${away}*${DONE}*${P.goalsA})`),
       fx(`G${r}-H${r}`),
       fx(`3*D${r}+E${r}`),
       ...[0, 1, 2, 3, 4].map((j) => vs(j, true)),
