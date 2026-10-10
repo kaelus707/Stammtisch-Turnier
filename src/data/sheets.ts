@@ -1,10 +1,11 @@
-import { SHEET_NAMES, type RawSheets, type SheetName } from './parse';
+import { SHEET_NAMES, SHEET_RANGES, type RawSheets, type SheetName } from './parse';
 
 const TIMEOUT_MS = 15_000;
 
 export function sheetUrl(sheetId: string, sheet: SheetName, base: string): string {
-  if (!sheetId) return `${base}demo/${sheet}.csv`;
-  return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(sheet)}`;
+  if (!sheetId) return `${base}demo/${encodeURIComponent(sheet)}.csv`;
+  const range = SHEET_RANGES[sheet];
+  return `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(sheet)}${range ? `&range=${range}` : ''}`;
 }
 
 export async function fetchSheets(sheetId: string, base: string, fetchFn: typeof fetch = fetch): Promise<RawSheets> {

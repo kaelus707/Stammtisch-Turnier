@@ -1,17 +1,18 @@
 import Papa from 'papaparse';
-import type { Group, Match, Player, Settings, Team, TournamentData } from '../domain/types';
+import type { Group, GroupTable, Player, ResolvedMatch, Settings, Side, StandingRow, Team, TournamentData } from '../domain/types';
 
-export const SHEET_NAMES = ['Einstellungen', 'Teams', 'Spielplan', 'Spieler'] as const;
+export const SHEET_NAMES = ['Einstellungen', 'Teams', 'Spielplan', 'Spieler', 'Gruppe A', 'Gruppe B', 'Endplatzierung'] as const;
 export type SheetName = (typeof SHEET_NAMES)[number];
 export type RawSheets = Record<SheetName, string>;
 
-type Row = Record<string, string>;
+/** Nur die Anzeige-Bereiche lesen – die Rechenhilfe darunter würde die gviz-Typerkennung stören */
+export const SHEET_RANGES: Partial<Record<SheetName, string>> = { 'Gruppe A': 'A1:L6', 'Gruppe B': 'A1:L6', Endplatzierung: 'A1:D11' };
 
-const PLACEHOLDER = /^([AB][1-5]|(Sieger|Verlierer) HF[12])$/;
-export const isPlaceholder = (s: string): boolean => PLACEHOLDER.test(s);
+type Row = Record<string, string>;
 
 // gviz exportiert Ganzzahlen gelegentlich als "3.0"
 const int = (s: string): number | null => (/^\d+(\.0+)?$/.test(s) ? parseInt(s, 10) : null);
+const signedInt = (s: string): number | null => (/^-?\d+(\.0+)?$/.test(s) ? parseInt(s, 10) : null);
 
 function parseTime(s: string): number | null {
   const m = /^(\d{1,2}):(\d{2})(:\d{2})?$/.exec(s);
@@ -66,16 +67,15 @@ function parseTeams(rows: Row[], w: string[]): Team[] {
       w.push(`Team „${name}“ ist doppelt eingetragen.`);
       continue;
     }
-    const rawLot = r['Los'] ?? '';
-    const lot = rawLot === '' ? null : int(rawLot);
-    if (rawLot !== '' && lot === null) w.push(`Team „${name}“: Los „${rawLot}“ ist keine Ganzzahl.`);
-    teams.push({ name, group, lot });
+    teams.push({ name, group });
   }
   return teams;
 }
 
-function parseMatches(rows: Row[], teams: Team[], w: string[]): Match[] {
-  const matches: Match[] = [];
+function parseMatches(rows: Row[], teams: Team[], w: string[]): ResolvedMatch[] {
+  const names = new Set(teams.map((t) => t.name));
+  const side = (s: string): Side => ({ team: names.has(s) ? s : null, label: s });
+  const matches: ResolvedMatch[] = [];
   for (const r of rows) {
     const nr = int(r['Nr.']);
     if (nr === null) {
@@ -88,9 +88,11 @@ function parseMatches(rows: Row[], teams: Team[], w: string[]): Match[] {
     }
     const g = /^Gruppe ([AB])$/i.exec(r['Runde']);
     const group = g ? (g[1].toUpperCase() as Group) : null;
-    const known = (s: string) =>
-      group ? teams.some((t) => t.name === s && t.group === group) : isPlaceholder(s) || teams.some((t) => t.name === s);
-    const bad = [r['Heim'], r['Gast']].find((s) => !known(s));
+    const home = r['Team A'];
+    const away = r['Team B'];
+    const bad = group
+      ? [home, away].find((s) => !teams.some((t) => t.name === s && t.group === group))
+      : [home, away].find((s) => s === '');
     if (bad !== undefined) {
       w.push(`Spiel ${nr}: Team „${bad}“ ist unbekannt${group ? ` in Gruppe ${group}` : ''}, Zeile ignoriert.`);
       continue;
@@ -101,12 +103,44 @@ function parseMatches(rows: Row[], teams: Team[], w: string[]): Match[] {
       if (n === null) w.push(`Spiel ${nr}: Tore „${s}“ ungültig, ignoriert.`);
       return n;
     };
+    const homeGoals = goals(r['Tore A']);
+    const awayGoals = goals(r['Tore B']);
+    const homeSide = side(home);
+    const awaySide = side(away);
+    const winner = names.has(r['Sieger']) ? r['Sieger'] : null;
+    const loser = winner === null ? null : winner === homeSide.team ? awaySide.team : homeSide.team;
+    const finished = homeGoals !== null && awayGoals !== null;
     matches.push({
-      nr, round: r['Runde'], group, home: r['Heim'], away: r['Gast'],
-      homeGoals: goals(r['Tore Heim']), awayGoals: goals(r['Tore Gast']),
+      nr, round: r['Runde'], group, home, away, homeGoals, awayGoals, homeSide, awaySide, winner, loser,
+      undecided: group === null && finished && r['Sieger'] === 'Unentschieden',
     });
   }
   return matches;
+}
+
+function parseGroup(rows: Row[], group: Group, w: string[]): GroupTable {
+  const out: StandingRow[] = [];
+  for (const r of rows) {
+    const team = r['Team'];
+    if (!team) continue;
+    const n = ['Platz', 'Sp', 'S', 'U', 'N', 'Tore', 'Gegentore', 'Diff', 'Pkt'].map((k) => signedInt(r[k]));
+    if (n.some((x) => x === null)) {
+      w.push(`Gruppe ${group}: Zeile „${team}“ enthält ungültige Zahlen, ignoriert.`);
+      continue;
+    }
+    const [rank, played, won, drawn, lost, goalsFor, goalsAgainst, diff, points] = n as number[];
+    out.push({ rank, team, played, won, drawn, lost, goalsFor, goalsAgainst, diff, points, lotPending: r['Hinweis'] === 'Los ausstehend' });
+  }
+  return { group, rows: out, complete: out.length > 0 && out.every((x) => x.played === out.length - 1) };
+}
+
+function parseRanking(rows: Row[]): (string | null)[] {
+  const ranking: (string | null)[] = [];
+  for (const r of rows) {
+    const p = int(r['Platz']);
+    if (p !== null && p > 0) ranking[p - 1] = r['Team'] || null;
+  }
+  return Array.from(ranking, (t) => t ?? null);
 }
 
 function parsePlayers(rows: Row[], teams: Team[], w: string[]): Player[] {
@@ -129,8 +163,11 @@ export function parseTournament(raw: RawSheets): { data: TournamentData; warning
   const settings = parseSettings(table(raw.Einstellungen, 'Einstellungen', ['Feld', 'Wert'], w), w);
   const teams = parseTeams(table(raw.Teams, 'Teams', ['Team', 'Gruppe'], w), w);
   const matches = parseMatches(
-    table(raw.Spielplan, 'Spielplan', ['Nr.', 'Runde', 'Heim', 'Gast', 'Tore Heim', 'Tore Gast'], w), teams, w,
+    table(raw.Spielplan, 'Spielplan', ['Nr.', 'Runde', 'Team A', 'Team B', 'Tore A', 'Tore B', 'Sieger'], w), teams, w,
   );
   const players = parsePlayers(table(raw.Spieler, 'Spieler', ['Name', 'Team', 'Tore'], w), teams, w);
-  return { data: { settings, teams, matches, players }, warnings: w };
+  const groupCols = ['Platz', 'Team', 'Sp', 'S', 'U', 'N', 'Tore', 'Gegentore', 'Diff', 'Pkt', 'Hinweis'];
+  const tables = (['A', 'B'] as const).map((g) => parseGroup(table(raw[`Gruppe ${g}`], `Gruppe ${g}`, groupCols, w), g, w));
+  const ranking = parseRanking(table(raw.Endplatzierung, 'Endplatzierung', ['Platz', 'Team'], w));
+  return { data: { settings, teams, matches, players, tables, ranking }, warnings: w };
 }

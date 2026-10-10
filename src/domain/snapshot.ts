@@ -1,24 +1,21 @@
-import { finalRanking, resolveMatches } from './bracket';
 import { restOverview } from './rest';
 import { findLast, findLive, findNext, plannedStart, sortByNr } from './schedule';
 import { scorerList } from './scorers';
-import { computeStandings } from './standings';
 import type { ScheduledMatch, Snapshot, TournamentData } from './types';
 import { isFinished } from './types';
 
+/** Ordnet die fertig gerechneten Daten der Tabelle für die Anzeige an – gewertet wird nur in der Tabelle. */
 export function buildSnapshot(data: TournamentData, parseWarnings: string[] = []): Snapshot {
   const warnings = [...parseWarnings];
-  const tables = (['A', 'B'] as const).map((g) => computeStandings(data.teams, data.matches, g));
-  const resolved = resolveMatches(sortByNr(data.matches), tables);
-  const matches: ScheduledMatch[] = resolved.map((x, index) => ({
+  const matches: ScheduledMatch[] = sortByNr(data.matches).map((x, index) => ({
     ...x, index, startMinutes: plannedStart(index, data.settings), finished: isFinished(x),
   }));
   for (const x of matches) if (x.undecided) warnings.push(`Spiel ${x.nr}: Unentschieden im K.-o.-Spiel – Sieger unbestimmt.`);
   const liveIndex = findLive(matches);
-  const ranking = finalRanking(resolved, data.teams.length);
+  const { ranking } = data;
   return {
     settings: data.settings,
-    tables,
+    tables: data.tables,
     matches,
     liveIndex,
     nextIndices: findNext(matches, liveIndex),

@@ -10,11 +10,18 @@ describe('sheetUrl', () => {
 
   it('nutzt ohne Sheet-ID die Demo-Dateien unter base', () => {
     expect(sheetUrl('', 'Teams', '/Stammtisch-Turnier/')).toBe('/Stammtisch-Turnier/demo/Teams.csv');
+    expect(sheetUrl('', 'Gruppe A', '/')).toBe('/demo/Gruppe%20A.csv');
+  });
+
+  it('begrenzt Gruppenblätter auf den Anzeige-Bereich', () => {
+    expect(sheetUrl('abc', 'Gruppe B', '/')).toBe(
+      'https://docs.google.com/spreadsheets/d/abc/gviz/tq?tqx=out:csv&headers=1&sheet=Gruppe%20B&range=A1:L6',
+    );
   });
 });
 
 describe('fetchSheets', () => {
-  it('lädt alle 4 Blätter mit Timeout-Signal und ohne Cache', async () => {
+  it('lädt alle Blätter mit Timeout-Signal und ohne Cache', async () => {
     const calls: [string, RequestInit | undefined][] = [];
     const fake = (async (url: string, init?: RequestInit) => {
       calls.push([url, init]);
@@ -22,7 +29,7 @@ describe('fetchSheets', () => {
     }) as typeof fetch;
     const raw = await fetchSheets('', '/', fake);
     expect(raw.Spieler).toBe('csv:Spieler.csv');
-    expect(calls).toHaveLength(4);
+    expect(calls).toHaveLength(7);
     expect(calls[0][1]?.cache).toBe('no-store');
     expect(calls[0][1]?.signal).toBeInstanceOf(AbortSignal);
   });

@@ -12,8 +12,6 @@ export interface Settings {
 export interface Team {
   name: string;
   group: Group;
-  /** kleiner = besser; null = kein Los eingetragen */
-  lot: number | null;
 }
 
 export interface Match {
@@ -21,7 +19,7 @@ export interface Match {
   round: string;
   /** 'A'/'B' bei Gruppenspielen, null bei Finalrundenspielen */
   group: Group | null;
-  /** Teamname oder Platzhalter wie 'A1', 'Sieger HF1' */
+  /** Text aus Spalte Team A/B: Teamname oder Platzhalter wie '1. Gr. A', 'Sieger HF1' */
   home: string;
   away: string;
   homeGoals: number | null;
@@ -37,8 +35,12 @@ export interface Player {
 export interface TournamentData {
   settings: Settings;
   teams: Team[];
-  matches: Match[];
+  /** von der Tabelle fertig aufgelöst */
+  matches: ResolvedMatch[];
   players: Player[];
+  tables: GroupTable[];
+  /** Index 0 = Platz 1; null = noch offen */
+  ranking: (string | null)[];
 }
 
 export interface StandingRow {
