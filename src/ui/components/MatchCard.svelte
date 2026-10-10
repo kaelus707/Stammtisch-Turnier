@@ -10,7 +10,7 @@
 <article class="card match" class:live class:done={match.finished && !live}>
   <div class="meta">
     {#if live}<LiveBadge />{/if}
-    <span class="round">Spiel {match.nr} · {match.round}</span>
+    <span><span class="nr">Spiel {match.nr}</span> · {match.round}</span>
     {#if time}<span class="time num">{live ? `Spielstart geplant: ${time}` : time}</span>{/if}
   </div>
   <div class="teams">
@@ -26,7 +26,7 @@
   .match.done .team { color: var(--text-muted); }
   .match.done .winner { color: var(--text); }
   .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.78rem; color: var(--text-muted); }
-  .round { color: #fff; }
+  .nr { color: #fff; }
   .time { margin-left: auto; }
   .teams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-top: 10px; }
   .team { font-size: clamp(0.875rem, 3.9vw, 1rem); font-weight: 700; overflow-wrap: break-word; hyphens: auto; min-width: 0; }
