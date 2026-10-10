@@ -6,7 +6,7 @@
   const ko = $derived(snapshot.matches.filter((x) => x.group === null));
   const find = (round: string) => ko.find((x) => x.round === round);
   const semis = $derived(['Halbfinale 1', 'Halbfinale 2'].map(find).filter((x) => x !== undefined));
-  const finals = $derived(['Finale', 'Spiel um Platz 3'].map(find).filter((x) => x !== undefined));
+  const finals = $derived(['Spiel um Platz 3', 'Finale'].map(find).filter((x) => x !== undefined));
   const placements = $derived(ko.filter((x) => !/^Halbfinale [12]$|^Finale$|^Spiel um Platz 3$/.test(x.round)));
 </script>
 
@@ -22,6 +22,13 @@
   </ol>
 {/if}
 
+{#if placements.length}
+  <h2 class="section-title">Platzierungsspiele</h2>
+  <div class="stack">
+    {#each placements as x (x.nr)}<MatchCard match={x} live={x.index === snapshot.liveIndex} />{/each}
+  </div>
+{/if}
+
 {#if semis.length}
   <h2 class="section-title">Halbfinale</h2>
   <div class="stack">
@@ -30,16 +37,9 @@
 {/if}
 
 {#if finals.length}
-  <h2 class="section-title">Finale und Platz 3</h2>
+  <h2 class="section-title">Platz 3 und Finale</h2>
   <div class="stack">
     {#each finals as x (x.nr)}<MatchCard match={x} live={x.index === snapshot.liveIndex} />{/each}
-  </div>
-{/if}
-
-{#if placements.length}
-  <h2 class="section-title">Platzierungsspiele</h2>
-  <div class="stack">
-    {#each placements as x (x.nr)}<MatchCard match={x} live={x.index === snapshot.liveIndex} />{/each}
   </div>
 {/if}
 
