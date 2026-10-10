@@ -22,7 +22,9 @@
     { id: 'scorers', label: 'Torschützen', icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7.5l3.8 2.8-1.5 4.4H9.7l-1.5-4.4z"/>' },
   ];
 
-  let tab = $state<TabId>('now');
+  // Tab steht im Hash der Adresse, damit Neuladen auf derselben Seite landet
+  const fromHash = location.hash.slice(1) as TabId;
+  let tab = $state<TabId>(TABS.some((t) => t.id === fromHash) ? fromHash : 'now');
   let snapshot = $state<Snapshot | null>(null);
   let loadedAt = $state<number | null>(null);
   let failed = $state(false);
@@ -47,6 +49,7 @@
 
   function show(id: TabId) {
     tab = id;
+    history.replaceState(null, '', `#${id}`);
     window.scrollTo(0, 0);
   }
 
