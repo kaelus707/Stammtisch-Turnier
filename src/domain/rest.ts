@@ -22,15 +22,16 @@ export function restOverview(
   return entries.sort((a, b) => key(a) - key(b) || a.team.localeCompare(b.team, 'de'));
 }
 
+const withNr = (text: string, e: RestEntry) => (e.nextNr === null ? text : `${text} · Spiel ${e.nextNr}`);
+
 export function restLabel(e: RestEntry): string {
   switch (e.status) {
     case 'playing':
-      return 'spielt jetzt';
+      return withNr('spielt jetzt', e);
     case 'next':
-      return 'nächstes Spiel';
+      return withNr('nächstes Spiel', e);
     case 'resting': {
-      const text = `noch ${e.gap} ${e.gap === 1 ? 'Spiel' : 'Spiele'} Pause`;
-      return e.nextNr === null ? text : `${text} · Spiel ${e.nextNr}`;
+      return withNr(`noch ${e.gap} ${e.gap === 1 ? 'Spiel' : 'Spiele'} Pause`, e);
     }
     case 'waiting':
       return 'wartet auf Finalrunde';

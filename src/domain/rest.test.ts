@@ -50,8 +50,8 @@ describe('restLabel', () => {
   });
 
   it('formuliert die Texte laut Spec', () => {
-    expect(restLabel(e({ status: 'playing' }))).toBe('spielt jetzt');
-    expect(restLabel(e({ status: 'next' }))).toBe('nächstes Spiel');
+    expect(restLabel(e({ status: 'playing', nextNr: 2 }))).toBe('spielt jetzt · Spiel 2');
+    expect(restLabel(e({ status: 'next', nextNr: 3 }))).toBe('nächstes Spiel · Spiel 3');
     expect(restLabel(e({ gap: 1, nextNr: 4 }))).toBe('noch 1 Spiel Pause · Spiel 4');
     expect(restLabel(e({ gap: 3, nextNr: 6 }))).toBe('noch 3 Spiele Pause · Spiel 6');
     expect(restLabel(e({ gap: 2 }))).toBe('noch 2 Spiele Pause');
