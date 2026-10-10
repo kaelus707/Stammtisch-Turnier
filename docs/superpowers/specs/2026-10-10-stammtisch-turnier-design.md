@@ -93,7 +93,7 @@ Ein Skript (`tools/template.ts`, ausgeführt mit `npm run template`) erzeugt `vo
 - **Pausen-Übersicht** pro Team, bezogen auf den Index L des Live-Spiels und den Index k des nächsten offenen Spiels des Teams (Platzhalter werden vorher so weit wie möglich aufgelöst):
   - k = L → „spielt jetzt“
   - k = L + 1 → „nächstes Spiel“
-  - k > L + 1 → „noch (k − L − 1) Spiele Pause“, dazu die geplante Uhrzeit von Spiel k
+  - k > L + 1 → „noch (k − L − 1) Spiele Pause“ (bei 1: „noch 1 Spiel Pause“), dazu die geplante Uhrzeit von Spiel k
   - kein offenes Spiel bekannt, aber noch ungelöste Platzhalter → „wartet auf Finalrunde“
   - kein offenes Spiel mehr → „fertig“ (mit Endplatz, falls bekannt)
   - Sortierung: aufsteigend nach k, fertige Teams am Ende
@@ -168,5 +168,5 @@ Ein GitHub-Actions-Workflow führt bei jedem Push auf `main` Tests und Build aus
 
 ## 10. Offene Punkte vor der Umsetzung
 
-- Zugriff auf `github.com/kaelus707/Stammtisch-Turnier` (aktuell lokal kein Push möglich: keine Anmeldedaten bzw. kein `gh`).
+- Das Repo `github.com/kaelus707/Stammtisch-Turnier` ist privat. GitHub Pages für private Repos braucht GitHub Pro; sonst muss das Repo vor dem ersten Deployment öffentlich werden.
 - Die Sheet-ID wird nachgetragen, sobald der Veranstalter die Vorlage in Google Drive importiert hat. Bis dahin arbeiten Entwicklung und Tests mit lokalen CSV-Fixtures.
