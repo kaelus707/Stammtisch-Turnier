@@ -1,11 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { ago } from './format';
+import { clock } from './format';
 
-describe('ago', () => {
-  it('formuliert die Zeit seit der letzten Aktualisierung', () => {
-    expect(ago(2_000)).toBe('gerade eben');
-    expect(ago(12_400)).toBe('vor 12 s');
-    expect(ago(125_000)).toBe('vor 2 min');
-    expect(ago(-500)).toBe('gerade eben');
+describe('clock', () => {
+  it('zeigt Stunden und Minuten zweistellig', () => {
+    expect(clock(new Date(2026, 9, 10, 20, 57).getTime())).toBe('20:57');
+    expect(clock(new Date(2026, 9, 10, 9, 5).getTime())).toBe('09:05');
   });
 });

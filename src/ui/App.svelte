@@ -6,7 +6,7 @@
   import { buildSnapshot } from '../domain/snapshot';
   import type { Snapshot } from '../domain/types';
   import WarningBox from './components/WarningBox.svelte';
-  import { ago, clock } from './format';
+  import { clock } from './format';
   import Final from './tabs/Final.svelte';
   import Now from './tabs/Now.svelte';
   import Schedule from './tabs/Schedule.svelte';
@@ -26,8 +26,7 @@
   let snapshot = $state<Snapshot | null>(null);
   let loadedAt = $state<number | null>(null);
   let failed = $state(false);
-  let now = $state(Date.now());
-  let loading = false;
+  let loading = $state(false);
 
   async function refresh() {
     if (loading) return;
@@ -54,14 +53,12 @@
   onMount(() => {
     refresh();
     const poll = setInterval(refresh, REFRESH_MS);
-    const tick = setInterval(() => (now = Date.now()), 1000);
     const onVisible = () => {
       if (document.visibilityState === 'visible') refresh();
     };
     document.addEventListener('visibilitychange', onVisible);
     return () => {
       clearInterval(poll);
-      clearInterval(tick);
       document.removeEventListener('visibilitychange', onVisible);
     };
   });
@@ -76,9 +73,12 @@
   <div class="title">
     <h1>{snapshot?.settings.name ?? 'Stammtischturnier'}</h1>
     <p class="muted">
-      {snapshot?.settings.date ?? ''}{#if loadedAt !== null}{snapshot?.settings.date ? ' · ' : ''}aktualisiert {ago(now - loadedAt)}{/if}
+      {snapshot?.settings.date ?? ''}{#if loadedAt !== null}{snapshot?.settings.date ? ' · ' : ''}<span class="dot" class:off={failed}></span>Stand {clock(loadedAt)}{/if}
     </p>
   </div>
+  <button class="reload" class:spin={loading} onclick={refresh} disabled={loading} aria-label="Aktualisieren">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg>
+  </button>
 </header>
 
 {#if failed && snapshot && loadedAt !== null}
@@ -132,7 +132,24 @@
     border-bottom: 1px solid var(--border);
   }
   .top img { flex: none; object-fit: contain; }
-  .title { min-width: 0; }
+  .title { min-width: 0; flex: 1; }
+  .dot { display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: #3ecf6e; vertical-align: 1px; }
+  .dot.off { background: var(--text-muted); }
+  .reload {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface-2);
+    color: var(--text);
+    cursor: pointer;
+  }
+  .reload svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .reload.spin svg { animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
   h1 { margin: 0; font-size: 1.05rem; font-weight: 800; overflow-wrap: break-word; hyphens: auto; }
   .title p { margin: 2px 0 0; font-size: 0.8rem; }
   .banner {
