@@ -26,7 +26,7 @@
   .match.done .team { color: var(--text-muted); }
   .match.done .winner { color: var(--text); }
   .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.78rem; color: var(--text-muted); }
-  .nr { color: var(--accent-text); }
+  .nr { color: #fff; }
   .time { margin-left: auto; color: var(--accent-text); }
   .teams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-top: 10px; }
   .team { font-size: clamp(0.875rem, 3.9vw, 1rem); font-weight: 700; overflow-wrap: break-word; hyphens: auto; min-width: 0; }
