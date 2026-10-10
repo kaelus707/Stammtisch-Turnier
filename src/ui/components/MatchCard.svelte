@@ -15,7 +15,7 @@
   </div>
   <div class="teams">
     <span class="team home" class:pending={!match.homeSide.team} class:winner={match.winner !== null && match.winner === match.homeSide.team}>{match.homeSide.label}</span>
-    <span class="score num">{match.finished ? `${match.homeGoals} : ${match.awayGoals}` : '–'}</span>
+    <span class="score num">{match.finished ? `${match.homeGoals}:${match.awayGoals}` : '–'}</span>
     <span class="team away" class:pending={!match.awaySide.team} class:winner={match.winner !== null && match.winner === match.awaySide.team}>{match.awaySide.label}</span>
   </div>
   {#if match.undecided}<p class="hint">Unentschieden – Sieger unbestimmt</p>{/if}
