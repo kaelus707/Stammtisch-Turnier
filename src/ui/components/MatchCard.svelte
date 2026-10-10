@@ -23,7 +23,7 @@
 
 <style>
   .match.live { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
-  .match.done .team, .match.done .score { color: var(--text-muted); }
+  .match.done .team { color: var(--text-muted); }
   .match.done .winner { color: var(--text); }
   .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.78rem; color: var(--text-muted); }
   .time { margin-left: auto; }

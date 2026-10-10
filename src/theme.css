@@ -73,7 +73,7 @@ span.live.live.live .dot { background: var(--on-accent); box-shadow: none; }
 .goals.goals.goals { font-family: var(--mono); }
 .top .goals.goals.goals { border-radius: var(--radius); color: var(--on-accent); }
 .match.match.live { box-shadow: 0 0 0 1px var(--accent) inset, 0 0 32px -8px #ff4d5766; }
-.score.score.score { font-family: var(--mono); font-weight: 700; }
+.score.score.score { font-family: var(--mono); font-weight: 800; color: #fff; }
 .meta.meta.meta { font-family: var(--mono); font-size: 0.72rem; }
 
 /* Siegerkarte: dunkel mit Koralle-Glow statt roter Fläche, Sieger in Sentient-Kursiv wie „really" */

@@ -45,6 +45,7 @@
 </div>
 
 <style>
+  .stack > :global(.live) { margin-block: 24px; }
   .filter { display: flex; align-items: center; gap: 12px; margin: 16px 0 12px; }
   select {
     flex: 1;
