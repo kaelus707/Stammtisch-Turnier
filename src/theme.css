@@ -1,0 +1,91 @@
+/* Look im Stil von openclaw.ai: Ink-Grau, Rot, Switzer, Mono-Labels.
+   Dreifache Klassen (.x.x.x) schlagen die gescopten Svelte-Styles (2 Klassen). */
+:root {
+  --bg: #101012;
+  --surface: #19191c;
+  --surface-2: #202024;
+  --border: #2a2a2f;
+  --text: #ededed;
+  --text-muted: #9a9aa2;
+  --accent: #ff4d57;
+  --accent-text: #ff4d57;
+  --on-accent: #101012;
+  --sea: #4fc8ae;
+  --mono: ui-monospace, 'SF Mono', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+  --radius: 8px;
+  font-family: 'Switzer', system-ui, sans-serif;
+}
+
+::selection { background: #ff4d5747; }
+
+body {
+  background:
+    radial-gradient(60% 40% at 50% 0%, #ff4d571f, transparent 70%),
+    radial-gradient(circle, #ffffff0d 1px, transparent 1px) 0 0 / 18px 18px,
+    var(--bg);
+  background-attachment: fixed;
+}
+
+.card {
+  background: #19191cb8;
+  border-color: var(--border);
+  box-shadow: inset 0 1px 0 #ededed0d;
+  transition: border-color .2s cubic-bezier(.23, 1, .32, 1);
+}
+.card:hover { border-color: #3a3a40; }
+
+.section-title {
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--accent-text);
+}
+
+.btn, .btn.btn.btn {
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 0.85rem;
+  box-shadow: 0 0 24px -6px #ff4d5780;
+}
+.btn:hover { background: #e30613; }
+
+:focus-visible { outline-color: var(--sea); }
+
+/* Kopfzeile wie die OpenClaw-Navigation */
+.top.top.top { background: #101012d9; backdrop-filter: blur(12px); border-bottom-color: var(--border); }
+.top.top.top h1 { font-weight: 700; letter-spacing: -0.02em; }
+.top.top.top .title p { font-family: var(--mono); font-size: 0.72rem; }
+.dot.dot.dot { background: var(--sea); box-shadow: 0 0 8px var(--sea); }
+.reload.reload.reload { border-radius: var(--radius); background: var(--surface); }
+.reload.reload.reload:hover { border-color: var(--accent); color: var(--accent); }
+.banner.banner.banner { border-radius: var(--radius); font-family: var(--mono); font-size: 0.8rem; }
+
+/* Untere Tab-Leiste */
+.tabs.tabs.tabs { background: #101012e6; backdrop-filter: blur(12px); }
+.tabs.tabs.tabs button { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.02em; }
+.tabs.tabs.tabs button.active { color: var(--accent); }
+
+/* Live-Badge, Torschützen-Pille: dunkle Schrift auf Koralle wie die OpenClaw-Buttons */
+span.live.live.live { border-radius: var(--radius); color: var(--on-accent); font-family: var(--mono); font-weight: 600; }
+span.live.live.live .dot { background: var(--on-accent); box-shadow: none; }
+.goals.goals.goals { font-family: var(--mono); }
+.top .goals.goals.goals { border-radius: var(--radius); color: var(--on-accent); }
+.match.match.live { box-shadow: 0 0 0 1px var(--accent) inset, 0 0 32px -8px #ff4d5766; }
+.score.score.score { font-family: var(--mono); font-weight: 700; }
+.meta.meta.meta { font-family: var(--mono); font-size: 0.72rem; }
+
+/* Siegerkarte: dunkel mit Koralle-Glow statt roter Fläche, Sieger in Sentient-Kursiv wie „really" */
+.champion.champion.champion {
+  background: radial-gradient(80% 90% at 50% 0%, #ff4d5733, transparent 70%), var(--surface);
+  border: 1px solid #ff4d5766;
+}
+.champion.champion.champion .muted { font-family: var(--mono); color: var(--accent); }
+.champion.champion.champion .name { font-family: 'Sentient', Georgia, serif; font-style: italic; font-weight: 400; font-size: 2.2rem; color: var(--accent); }
+.champion.champion.champion .btn { background: var(--accent); color: var(--on-accent); }
+
+th { font-family: var(--mono); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+.pts.pts.pts { color: var(--accent); }
