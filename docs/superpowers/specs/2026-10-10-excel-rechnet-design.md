@@ -103,7 +103,7 @@ Zusätzlich gibt es die Spalte L mit der Überschrift `Hinweis`. Sie enthält `L
 - Die Kreuztabelle 5×5 mit Punkten und Tordifferenz von Team i gegen Team j. Ist das Spiel noch offen, steht dort 0.
 - Mini-Tabelle: `H2H-Pkt(i) = Σ_j P(i,j)·[Pkt(j)=Pkt(i)]·[Diff(j)=Diff(i)]`. Für `H2H-Diff` gilt dasselbe.
 - `Schlüssel = Pkt·10^11 + (Diff+500)·10^8 + H2H-Pkt·10^6 + (H2H-Diff+500)·10^3 + Tore`. Der Wert bleibt unter 15 Stellen und ist damit exakt.
-- `Rang = 1 + Anzahl(Schlüssel_j > Schlüssel_i) + Anzahl(Schlüssel_j = Schlüssel_i und Los_j < Los_i, beide Los gefüllt)`.
+- `Rang = 1 + Anzahl(Schlüssel_j > Schlüssel_i) + Anzahl(Schlüssel_j = Schlüssel_i und Los_j < Los_i; ein leeres Los zählt als schlechtester)`.
 - `Los ausstehend(i)` gilt, wenn es ein j≠i mit gleichem Schlüssel gibt und bei i oder j das Los fehlt oder beide Lose gleich sind.
 - `Anzeigeplatz` ist der Rang plus die Zahl der vorherigen Zeilen mit gleichem Rang. Damit ist er eindeutig und funktioniert auch bei „Los ausstehend“.
 - `Gruppe komplett` ist erfüllt, wenn 10 Gruppenspiele dieser Gruppe gespielt sind.

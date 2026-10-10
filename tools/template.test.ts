@@ -68,6 +68,10 @@ describe('buildWorkbook – Aufbau', () => {
     }
   });
 
+  it('lässt Excel beim Öffnen neu rechnen', () => {
+    expect(wb.calcProperties.fullCalcOnLoad).toBe(true);
+  });
+
   it('lässt sich als xlsx schreiben', async () => {
     expect((await wb.xlsx.writeBuffer()).byteLength).toBeGreaterThan(1000);
   });
@@ -170,5 +174,20 @@ describe('buildWorkbook – Formeln', () => {
     expect(col(c.table('Gruppe B', 'A2:L6'), 1)).toEqual(['B5', 'B4', 'B3', 'B2', 'B1']);
     expect(col(c.table('Gruppe B', 'A2:L6'), 11)).toEqual(['', '', '', '', '']);
     expect([c.get('Spielplan', 'G23'), c.get('Spielplan', 'H23')]).toEqual(['B4', 'Team B4']);
+  });
+
+  it('ordnet bei nur teilweise eingetragenem Los trotzdem alle fünf Plätze', () => {
+    const wb = buildWorkbook();
+    for (let i = 1; i <= 5; i++) for (let j = i + 1; j <= 5; j++) score(wb, `A${i}`, `A${j}`, 0, 0);
+    const teams = wb.getWorksheet('Teams')!;
+    teams.getCell('D2').value = 1;
+    teams.getCell('D3').value = 2;
+    const c = calculate(wb);
+    const a = c.table('Gruppe A', 'A2:N6');
+    expect(col(a, 0)).toEqual([1, 2, 3, 4, 5]);
+    expect(col(a, 1).slice(0, 2)).toEqual(['A1', 'A2']);
+    expect(new Set(col(a, 1)).size).toBe(5);
+    expect(col(a, 11)).toEqual(Array(5).fill('Los ausstehend'));
+    expect(c.get('Spielplan', 'F23')).toBe('1. Gr. A (Los ausstehend)');
   });
 });

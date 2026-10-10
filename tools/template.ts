@@ -118,7 +118,8 @@ function groupSheet(wb: ExcelJS.Workbook, g: Group) {
       fx(`IF(${lot}="","",${lot})`),
       // Punkte, Diff, Mini-Pkt, Mini-Diff, Tore als eine Zahl (< 15 Stellen, also exakt)
       fx(`J${r}*10^11+(I${r}+500)*10^8+U${r}*10^6+(V${r}+500)*10^3+G${r}`),
-      fx(`1+SUMPRODUCT(--(${all('X')}>X${r}))+SUMPRODUCT((${all('X')}=X${r})*(${all('W')}<>"")*(W${r}<>"")*(${all('W')}<W${r}))`),
+      // Los: Zahl < Text, ein leeres Los ("") zählt daher als schlechtester
+      fx(`1+SUMPRODUCT(--(${all('X')}>X${r}))+SUMPRODUCT((${all('X')}=X${r})*(${all('W')}<W${r}))`),
       fx(`IF(SUMPRODUCT((${all('X')}=X${r})*(${all('A')}<>A${r})*(((${all('W')}="")+(W${r}="")+(${all('W')}=W${r}))>0))>0,1,0)`),
       fx(`Y${r}+SUMPRODUCT((${all('Y')}=Y${r})*(${all('A')}<A${r}))`),
     ];
@@ -182,6 +183,8 @@ function rankingSheet(wb: ExcelJS.Workbook) {
 
 export function buildWorkbook(): ExcelJS.Workbook {
   const wb = new ExcelJS.Workbook();
+  // Zellen haben keine gespeicherten Ergebnisse – Excel muss beim Öffnen selbst rechnen
+  wb.calcProperties.fullCalcOnLoad = true;
 
   const settings = sheet(wb, 'Einstellungen', [['Feld', 22], ['Wert', 30]]);
   settings.addRows([
