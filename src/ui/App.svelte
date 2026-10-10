@@ -169,6 +169,7 @@
     gap: 3px;
     min-width: 0;
     border: 0;
+    padding: 0 2px;
     background: none;
     color: var(--text-muted);
     font-size: 0.75rem;

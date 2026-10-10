@@ -27,13 +27,13 @@
   .match.done .winner { color: var(--text); }
   .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.78rem; color: var(--text-muted); }
   .time { margin-left: auto; }
-  .teams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; margin-top: 10px; }
-  .team { font-weight: 700; overflow-wrap: break-word; hyphens: auto; min-width: 0; }
+  .teams { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; margin-top: 10px; }
+  .team { font-size: clamp(0.875rem, 3.9vw, 1rem); font-weight: 700; overflow-wrap: break-word; hyphens: auto; min-width: 0; }
   .home { text-align: right; }
-  .live .team { font-size: 1.15rem; }
+  .live .team { font-size: clamp(1rem, 4.4vw, 1.15rem); }
   .pending { color: var(--text-muted); font-weight: 500; font-style: italic; }
   .winner { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
-  .score { min-width: 3.2em; text-align: center; font-size: 1.2rem; font-weight: 800; }
+  .score { min-width: 2.6em; text-align: center; font-size: 1.2rem; font-weight: 800; }
   .live .score { font-size: 1.5rem; }
   .hint { margin: 8px 0 0; font-size: 0.8rem; color: var(--accent-text); }
 </style>
