@@ -30,9 +30,7 @@ body {
   background: #19191cb8;
   border-color: var(--border);
   box-shadow: inset 0 1px 0 #ededed0d;
-  transition: border-color .2s cubic-bezier(.23, 1, .32, 1);
 }
-.card:hover { border-color: #3a3a40; }
 
 .section-title {
   font-family: var(--mono);

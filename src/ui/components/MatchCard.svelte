@@ -32,7 +32,7 @@
   .home { text-align: right; }
   .live .team { font-size: clamp(1rem, 4.4vw, 1.15rem); }
   .pending { color: var(--text-muted); font-weight: 500; font-style: italic; }
-  .winner { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
+  .winner { color: var(--text); }
   .score { min-width: 2.6em; text-align: center; font-size: 1.2rem; font-weight: 800; }
   .live .score { font-size: 1.5rem; }
   .hint { margin: 8px 0 0; font-size: 0.8rem; color: var(--accent-text); }
