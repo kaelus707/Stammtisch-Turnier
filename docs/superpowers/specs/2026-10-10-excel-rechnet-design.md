@@ -108,7 +108,12 @@ Zusätzlich gibt es die Spalte L mit der Überschrift `Hinweis`. Sie enthält `L
 - `Anzeigeplatz` ist der Rang plus die Zahl der vorherigen Zeilen mit gleichem Rang. Damit ist er eindeutig und funktioniert auch bei „Los ausstehend“.
 - `Gruppe komplett` ist erfüllt, wenn 10 Gruppenspiele dieser Gruppe gespielt sind.
 
-Die Anzeige-Tabelle holt sich für Platz p die Zeile mit Anzeigeplatz p über `INDEX/MATCH`. Als `Platz` zeigt sie den echten Rang an. Teams mit „Los ausstehend“ teilen sich also denselben Platz.
+Die Anzeige-Tabelle holt sich für Platz p die Zeile mit Anzeigeplatz p über `INDEX/MATCH`. `Platz` ist der Anzeigeplatz (1–5, eindeutig), so wie die Webseite bisher nummeriert. Gleichstehende Teams erkennt man am Hinweis „Los ausstehend“, der erst bei kompletter Gruppe erscheint.
+
+Zwei Hilfsspalten außerhalb des Webseiten-Bereichs versorgen den Spielplan:
+
+- M `KO-Code`: der Code, wenn die Gruppe komplett ist und kein Hinweis gesetzt ist.
+- N `Platzhalter`: zum Beispiel `2. Gr. A` oder `2. Gr. A (Los ausstehend)`.
 
 ### 3.5 `Turnierbaum`
 
