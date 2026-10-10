@@ -48,14 +48,14 @@
   h3 { margin: 0 16px 8px; font-size: 1rem; }
   .scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th { color: var(--text-muted); font-weight: 600; font-size: 0.72rem; padding: 6px 4px; text-align: center; }
+  th { color: var(--text-muted); font-weight: 600; font-size: 0.75rem; padding: 6px 4px; text-align: center; }
   td { padding: 10px 4px; text-align: center; border-top: 1px solid var(--border); }
   th:first-child, td:first-child { padding-left: 16px; }
   th:last-child, td:last-child { padding-right: 16px; }
   .team { text-align: left; font-weight: 600; min-width: 7.5em; }
   .pts { font-weight: 800; }
   tr.semi td:first-child { box-shadow: inset 4px 0 0 var(--accent); }
-  .tag { display: block; font-size: 0.7rem; font-weight: 500; color: var(--accent-text); }
+  .tag { display: block; font-size: 0.75rem; font-weight: 500; color: var(--accent-text); }
   .legend { display: flex; align-items: center; gap: 8px; margin: 8px 16px 0; font-size: 0.75rem; }
   .swatch { width: 4px; height: 14px; background: var(--accent); border-radius: 2px; }
 </style>

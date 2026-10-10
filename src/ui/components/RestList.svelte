@@ -18,9 +18,9 @@
   .rest { list-style: none; margin: 0; padding: 4px 16px; }
   li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
   li:last-child { border-bottom: 0; }
-  .team { font-weight: 600; overflow-wrap: anywhere; }
+  .team { font-weight: 600; overflow-wrap: break-word; hyphens: auto; }
   .status { text-align: right; font-size: 0.88rem; color: var(--text-muted); flex: none; max-width: 60%; }
   .playing .status { color: var(--accent-text); font-weight: 700; }
   .next .status { color: var(--text); font-weight: 700; }
-  .done { opacity: 0.6; }
+  .done .team { color: var(--text-muted); font-weight: 500; }
 </style>

@@ -133,7 +133,7 @@
   }
   .top img { flex: none; object-fit: contain; }
   .title { min-width: 0; }
-  h1 { margin: 0; font-size: 1.05rem; font-weight: 800; overflow-wrap: anywhere; }
+  h1 { margin: 0; font-size: 1.05rem; font-weight: 800; overflow-wrap: break-word; hyphens: auto; }
   .title p { margin: 2px 0 0; font-size: 0.8rem; }
   .banner {
     margin: 12px 16px 0;
@@ -171,7 +171,7 @@
     border: 0;
     background: none;
     color: var(--text-muted);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     cursor: pointer;
   }
   .tabs button.active { color: var(--text); }

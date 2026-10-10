@@ -29,7 +29,7 @@
   li:last-child { border-bottom: 0; }
   .rank { width: 2em; color: var(--text-muted); }
   .who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-  .name { font-weight: 600; overflow-wrap: anywhere; }
+  .name { font-weight: 600; overflow-wrap: break-word; hyphens: auto; }
   .team { font-size: 0.8rem; }
   .goals { font-size: 1.1rem; font-weight: 800; }
   .top .rank { color: var(--accent-text); font-weight: 800; }
