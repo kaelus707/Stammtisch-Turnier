@@ -37,7 +37,9 @@ describe('buildWorkbook – Aufbau', () => {
   const wb = buildWorkbook();
 
   it('hat die Blätter in fester Reihenfolge', () => {
-    expect(wb.worksheets.map((w) => w.name)).toEqual(['Einstellungen', 'Teams', 'Spielplan', 'Gruppe A', 'Gruppe B', 'Spieler']);
+    expect(wb.worksheets.map((w) => w.name)).toEqual([
+      'Einstellungen', 'Teams', 'Spielplan', 'Gruppe A', 'Gruppe B', 'Turnierbaum', 'Endplatzierung', 'Spieler',
+    ]);
   });
 
   it('hat Teams mit festen Codes', () => {
@@ -116,6 +118,27 @@ describe('buildWorkbook – Formeln', () => {
     wb.getWorksheet('Spielplan')!.getCell('I2').value = 3;
     const rows = calculate(wb).table('Gruppe A', 'A10:J11');
     expect(rows.map((r) => [r[0], r[2], r[6], r[7], r[8]])).toEqual([['A1', 0, 0, 0, 0], ['A2', 0, 0, 0, 0]]);
+  });
+
+  it('füllt Endplatzierung und Turnierbaum aus dem Spielplan', () => {
+    const wb = buildWorkbook();
+    let c = calculate(wb);
+    expect(c.get('Endplatzierung', 'B2')).toBe('');
+    expect(c.get('Turnierbaum', 'B4')).toBe('1. Gr. A');
+
+    playGroupsByStrength(wb);
+    playKnockoutHomeWins(wb);
+    c = calculate(wb);
+    const end = c.table('Endplatzierung', 'A2:D11');
+    expect(col(end, 0)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(col(end, 1)).toEqual([
+      'Team A1', 'Team A2', 'Team B2', 'Team B1', 'Team A3', 'Team B3', 'Team A4', 'Team B4', 'Team A5', 'Team B5',
+    ]);
+    expect(end[0]).toEqual([1, 'Team A1', 'A', 'Sieger Finale']);
+    expect(end[3][3]).toBe('Verlierer Spiel um Platz 3');
+    expect([c.get('Turnierbaum', 'B4'), c.get('Turnierbaum', 'C4'), c.get('Turnierbaum', 'B5'), c.get('Turnierbaum', 'C5')])
+      .toEqual(['Team A1', 1, 'Team B2', 0]);
+    expect(c.get('Turnierbaum', 'E5')).toBe('Team A1');
   });
 
   it('sortiert drei gleichstehende Teams über die Mini-Tabelle', () => {

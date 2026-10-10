@@ -140,6 +140,46 @@ function groupSheet(wb: ExcelJS.Workbook, g: Group) {
   }
 }
 
+/** [Runde, Spalte Teamname, Startzeile] – Spalte daneben zeigt die Tore */
+const TREE: [round: string, col: 'B' | 'E', row: number][] = [
+  ['Halbfinale 1', 'B', 3], ['Halbfinale 2', 'B', 7], ['Finale', 'E', 4], ['Spiel um Platz 3', 'E', 8],
+  ['Spiel um Platz 5', 'B', 13], ['Spiel um Platz 7', 'B', 17], ['Spiel um Platz 9', 'B', 21],
+];
+
+function treeSheet(wb: ExcelJS.Workbook) {
+  const ws = wb.addWorksheet('Turnierbaum');
+  ws.columns = [3, 26, 6, 3, 26, 6].map((width) => ({ width }));
+  ws.getCell('A1').value = 'Turnierbaum – füllt sich automatisch aus dem Spielplan';
+  ws.getCell('B12').value = 'Platzierungsspiele';
+  for (const c of ['A1', 'B12']) ws.getCell(c).font = { bold: true };
+  for (const [round, col, row] of TREE) {
+    const r = PLAN_ROW(round);
+    const goals = col === 'B' ? 'C' : 'F';
+    ws.getCell(`${col}${row}`).value = round;
+    ws.getCell(`${col}${row}`).font = { bold: true };
+    ws.getCell(`${col}${row + 1}`).value = fx(`Spielplan!F${r}`);
+    ws.getCell(`${goals}${row + 1}`).value = fx(`IF(Spielplan!I${r}="","",Spielplan!I${r})`);
+    ws.getCell(`${col}${row + 2}`).value = fx(`Spielplan!H${r}`);
+    ws.getCell(`${goals}${row + 2}`).value = fx(`IF(Spielplan!J${r}="","",Spielplan!J${r})`);
+  }
+}
+
+/** Spiel → Platz des Siegers (Verlierer = Platz + 1) */
+const PLACES: [round: string, place: number][] = [
+  ['Finale', 1], ['Spiel um Platz 3', 3], ['Spiel um Platz 5', 5], ['Spiel um Platz 7', 7], ['Spiel um Platz 9', 9],
+];
+
+function rankingSheet(wb: ExcelJS.Workbook) {
+  const ws = sheet(wb, 'Endplatzierung', [['Platz', 6], ['Team', 26], ['Gruppe', 8], ['Herkunft', 28]]);
+  for (const [round, place] of PLACES)
+    for (const [k, who, col] of [[0, 'Sieger', 'L'], [1, 'Verlierer', 'M']] as const) {
+      const code = `Spielplan!$${col}$${PLAN_ROW(round)}`;
+      ws.getRow(place + k + 1).values = [
+        place + k, fx(nameOf(code)), fx(`IFERROR(INDEX(Teams!$C$2:$C$11,MATCH(${code},${CODES},0)),"")`), `${who} ${round}`,
+      ];
+    }
+}
+
 export function buildWorkbook(): ExcelJS.Workbook {
   const wb = new ExcelJS.Workbook();
 
@@ -165,6 +205,8 @@ export function buildWorkbook(): ExcelJS.Workbook {
   planSheet(wb);
   groupSheet(wb, 'A');
   groupSheet(wb, 'B');
+  treeSheet(wb);
+  rankingSheet(wb);
 
   const players = sheet(wb, 'Spieler', [['Name', 24], ['Team', 24], ['Tore', 6]]);
   players.addRow(['Max Mustermann', 'Team A1', 0]);
