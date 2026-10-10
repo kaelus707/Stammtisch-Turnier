@@ -50,6 +50,12 @@ describe('computeStandings', () => {
     const t = computeStandings(five(['X', 'Y', 'Z', 'V', 'W'], [2, 1]), [m(1, 'X', 'Y', [1, 1])], 'A');
     expect(order(t).slice(0, 2)).toEqual(['Y', 'X']);
     expect(t.rows.slice(0, 2).map((r) => r.lotPending)).toEqual([false, false]);
+    expect(t.rows.filter((r) => ['Z', 'V', 'W'].includes(r.team)).every((r) => r.lotPending)).toBe(true);
+  });
+
+  it('markiert alle gleichstehenden Teams „Los ausstehend“, wenn eines kein Los hat', () => {
+    const t = computeStandings(five(['X', 'Y', 'Z', 'V', 'W'], [1, 2, null]), [m(1, 'X', 'Y', [1, 1]), m(2, 'X', 'Z', [1, 1]), m(3, 'Y', 'Z', [1, 1])], 'A');
+    expect(t.rows.slice(0, 3).map((r) => [r.team, r.lotPending])).toEqual([['X', true], ['Y', true], ['Z', true]]);
   });
 
   it('markiert „Los ausstehend“, wenn bei Gleichstand ein Los fehlt', () => {

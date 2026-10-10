@@ -61,16 +61,20 @@ export function computeStandings(teams: Team[], matches: Match[], group: Group):
       if (lb === null) return -1;
       return la - lb;
     };
-    const tied = (a: Stats, b: Stats) =>
-      byTiebreak(a, b) === 0 && (lotOf(a) === null || lotOf(b) === null || lotOf(a) === lotOf(b));
     bucket.sort((a, b) => byTiebreak(a, b) || byLot(a, b));
-    bucket.forEach((s, k) =>
-      rows.push({
-        ...s,
-        rank: rows.length + 1,
-        lotPending: (k > 0 && tied(s, bucket[k - 1])) || (k < bucket.length - 1 && tied(s, bucket[k + 1])),
-      }),
-    );
+    // Lauf = aufeinanderfolgende Teams, die nach Stufe 4 gleichstehen; fehlt in einem Lauf ein Los, sind alle offen
+    const pending: boolean[] = bucket.map(() => false);
+    for (let a = 0; a < bucket.length; ) {
+      let b = a + 1;
+      while (b < bucket.length && byTiebreak(bucket[a], bucket[b]) === 0) b++;
+      const run = bucket.slice(a, b);
+      const anyNull = run.some((s) => lotOf(s) === null);
+      run.forEach((s, k) => {
+        pending[a + k] = run.length > 1 && (anyNull || (k > 0 && lotOf(s) === lotOf(run[k - 1])) || (k < run.length - 1 && lotOf(s) === lotOf(run[k + 1])));
+      });
+      a = b;
+    }
+    bucket.forEach((s, k) => rows.push({ ...s, rank: rows.length + 1, lotPending: pending[k] }));
     i = j;
   }
   return { group, rows, complete: groupMatches.length > 0 && groupMatches.every(isFinished) };
