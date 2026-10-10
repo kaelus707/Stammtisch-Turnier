@@ -1,5 +1,7 @@
 # Stammtisch-Turnier – Design-Spec
 
+> **Nachtrag 10.10.2026:** Gewertet wird jetzt ausschließlich in der Google-Tabelle. Die Abschnitte zu den Blättern, zur Tabellenberechnung in der App und zum Bracket gelten nur noch, soweit `2026-10-10-excel-rechnet-design.md` nichts anderes sagt.
+
 **Datum:** 2026-10-10
 **Status:** Entwurf zur Freigabe
 
