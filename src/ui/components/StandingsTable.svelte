@@ -24,7 +24,7 @@
       <tbody>
         {#each table.rows as r (r.team)}
           <tr class:semi={r.rank <= 2}>
-            <td class="num">{r.rank}</td>
+            <td class="num">{r.rank}.</td>
             <td class="team">
               {r.team}{#if table.complete && r.lotPending}<span class="tag">Los ausstehend</span>{/if}
             </td>

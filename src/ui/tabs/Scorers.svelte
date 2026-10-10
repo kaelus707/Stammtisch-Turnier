@@ -12,7 +12,7 @@
     <!-- ohne Key: gleichnamige Spieler im selben Team dürfen nicht abstürzen -->
     {#each snapshot.scorers as s}
       <li class:podium={s.rank <= 3}>
-        <span class="rank num">{s.rank}</span>
+        <span class="rank num">{s.rank}.</span>
         <span class="who">
           <span class="name">{s.name}</span>
           <span class="muted team">{s.team}</span>
