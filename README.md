@@ -11,7 +11,7 @@ Live-Seite fürs Stammtischturnier: https://kaelus707.github.io/Stammtisch-Turni
 4. Am Turniertag nur noch Teams, Ergebnisse (`Tore Heim`/`Tore Gast`) und Torschützen eintragen.
    Die Seite aktualisiert sich alle 30 Sekunden selbst.
 
-Blattnamen und Spaltenüberschriften nicht ändern. K.-o.-Spiele mit Neunmeterschießen als Gesamtergebnis eintragen, z. B. `6:5`.
+Blattnamen und Spaltenüberschriften nicht ändern. Ergebnisse immer als zwei Zahlen in zwei Zellen eintragen: `Tore Heim` und `Tore Gast` (nie `6:5` in eine Zelle – Google Tabellen macht daraus eine Uhrzeit). K.-o.-Spiele mit Neunmeterschießen als Gesamtergebnis inklusive Neunmeter, z. B. Tore Heim `6`, Tore Gast `5`.
 
 ## Entwicklung
 

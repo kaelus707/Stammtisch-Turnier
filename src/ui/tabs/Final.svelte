@@ -10,7 +10,7 @@
   const placements = $derived(ko.filter((x) => !/^Halbfinale [12]$|^Finale$|^Spiel um Platz 3$/.test(x.round)));
 </script>
 
-{#if snapshot.liveIndex === null}
+{#if snapshot.liveIndex === null && snapshot.matches.length > 0}
   <h2 class="section-title">Endstand</h2>
   <ol class="card ranking">
     {#each snapshot.ranking as team, i}

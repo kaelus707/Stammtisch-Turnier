@@ -9,6 +9,9 @@
   const last = $derived(snapshot.lastIndex === null ? null : snapshot.matches[snapshot.lastIndex]);
 </script>
 
+{#if snapshot.matches.length === 0}
+  <p class="muted empty">Keine Spiele gefunden.</p>
+{:else}
 {#if live}
   <h2 class="section-title">Jetzt</h2>
   <MatchCard match={live} live />
@@ -36,8 +39,10 @@
   <h2 class="section-title">Letztes Ergebnis</h2>
   <MatchCard match={last} />
 {/if}
+{/if}
 
 <style>
+  .empty { text-align: center; margin-top: 48px; }
   .champion {
     margin-top: 16px;
     text-align: center;
