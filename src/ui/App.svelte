@@ -23,8 +23,11 @@
   ];
 
   // Tab steht im Hash der Adresse, damit Neuladen auf derselben Seite landet
-  const fromHash = location.hash.slice(1) as TabId;
-  let tab = $state<TabId>(TABS.some((t) => t.id === fromHash) ? fromHash : 'now');
+  function fromHash(): TabId {
+    const id = location.hash.slice(1) as TabId;
+    return TABS.some((t) => t.id === id) ? id : 'now';
+  }
+  let tab = $state<TabId>(fromHash());
   let snapshot = $state<Snapshot | null>(null);
   let loadedAt = $state<number | null>(null);
   let failed = $state(false);
@@ -60,9 +63,13 @@
       if (document.visibilityState === 'visible') refresh();
     };
     document.addEventListener('visibilitychange', onVisible);
+    // Hash von Hand geändert oder Link auf derselben Seite geöffnet (replaceState löst das nicht aus)
+    const onHash = () => (tab = fromHash());
+    window.addEventListener('hashchange', onHash);
     return () => {
       clearInterval(poll);
       document.removeEventListener('visibilitychange', onVisible);
+      window.removeEventListener('hashchange', onHash);
     };
   });
 
