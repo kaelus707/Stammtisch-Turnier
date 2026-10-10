@@ -1,5 +1,6 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseTournament, type RawSheets } from './parse';
+import { parseTournament, SHEET_NAMES, type RawSheets } from './parse';
 
 const csv = (rows: (string | number)[][]) =>
   rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -162,5 +163,17 @@ describe('parseTournament', () => {
   it('warnt bei leerem Blatt', () => {
     const { warnings } = parseTournament({ ...base(), Spieler: '' });
     expect(warnings).toContain('Blatt „Spieler“ ist leer.');
+  });
+
+  it('parst die Demo-Dateien ohne Warnungen', () => {
+    const raw = Object.fromEntries(
+      SHEET_NAMES.map((s) => [s, readFileSync(new URL(`../../public/demo/${s}.csv`, import.meta.url), 'utf8')]),
+    ) as RawSheets;
+    const { data, warnings } = parseTournament(raw);
+    expect(warnings).toEqual([]);
+    expect(data.matches).toHaveLength(27);
+    expect(data.matches.filter((m) => m.homeGoals !== null && m.awayGoals !== null)).toHaveLength(11);
+    expect(data.tables.map((t) => t.rows.length)).toEqual([5, 5]);
+    expect(data.ranking).toEqual(Array(10).fill(null));
   });
 });
