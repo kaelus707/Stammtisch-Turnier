@@ -146,8 +146,9 @@ function parseRanking(rows: Row[]): (string | null)[] {
 function parsePlayers(rows: Row[], teams: Team[], w: string[]): Player[] {
   const players: Player[] = [];
   for (const r of rows) {
-    const name = r['Name'];
-    if (!name) continue;
+    if (!r['Name']) continue;
+    // Datenschutz: echte Namen bleiben im Sheet, die Seite zeigt nur die laufende Nummer (stabil nach Zeilenreihenfolge)
+    const name = `Spieler ${players.length + 1}`;
     const team = r['Team'];
     if (team && !teams.some((t) => t.name === team)) w.push(`Spieler „${name}“: Team „${team}“ ist unbekannt.`);
     const raw = r['Tore'];

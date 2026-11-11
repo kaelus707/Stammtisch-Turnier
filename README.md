@@ -1,4 +1,4 @@
-# Stammtisch-Turnier SV Saaldorf
+# Stammtisch-Turnier
 
 Live-Seite fürs Stammtischturnier: https://kaelus707.github.io/Stammtisch-Turnier/
 
@@ -35,3 +35,8 @@ Blattnamen und Spaltenüberschriften nicht ändern.
     npm run demo       # Demo-CSVs aus der Vorlage neu rechnen
 
 Einmalig im Repo: Repository öffentlich stellen und unter Settings → Pages → Source „GitHub Actions“ wählen.
+
+## Lizenzen
+
+- Logo: Ball-Icon „soccer-ball“ aus [Iconoir](https://github.com/iconoir-icons/iconoir) (MIT-Lizenz).
+- Schriften Switzer und Sentient: [Fontshare](https://www.fontshare.com/) (ITF Free Font License), lokal in `src/fonts/`.

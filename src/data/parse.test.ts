@@ -70,8 +70,8 @@ describe('parseTournament', () => {
     });
     expect(data.ranking).toEqual(['Rot', null]);
     expect(data.players).toEqual([
-      { name: 'Max', team: 'Rot', goals: 2 },
-      { name: 'Moritz', team: 'Blau', goals: 0 },
+      { name: 'Spieler 1', team: 'Rot', goals: 2 },
+      { name: 'Spieler 2', team: 'Blau', goals: 0 },
     ]);
   });
 
@@ -175,5 +175,14 @@ describe('parseTournament', () => {
     expect(data.matches.filter((m) => m.homeGoals !== null && m.awayGoals !== null)).toHaveLength(11);
     expect(data.tables.map((t) => t.rows.length)).toEqual([5, 5]);
     expect(data.ranking).toEqual(Array(10).fill(null));
+  });
+});
+
+describe('Spielernamen maskieren', () => {
+  it('zeigt nur „Spieler n“ nach Zeilenreihenfolge, auch in Warnungen', () => {
+    const raw = { ...base(), Spieler: csv([['Name', 'Team', 'Tore'], ['Max Muster', 'Rot', '2'], ['', '', ''], ['Moritz', 'Unbekannt', 'x']]) };
+    const { data, warnings } = parseTournament(raw);
+    expect(data.players.map((p) => p.name)).toEqual(['Spieler 1', 'Spieler 2']);
+    expect(warnings.join('\n')).not.toMatch(/Max|Moritz/);
   });
 });

@@ -79,7 +79,7 @@
 </script>
 
 <header class="top">
-  <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Wappen SV Saaldorf" width="44" height="44" />
+  <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Stammtischturnier" width="44" height="44" />
   <div class="title">
     <h1>{snapshot?.settings.name ?? 'Stammtischturnier'}</h1>
     <p class="muted">
@@ -117,6 +117,7 @@
   {:else}
     <p class="muted loading">Lade Turnierdaten …</p>
   {/if}
+  <p class="legal"><a href={`${import.meta.env.BASE_URL}datenschutz.html`}>Datenschutz</a></p>
 </main>
 
 <nav class="tabs" aria-label="Bereiche">
@@ -176,6 +177,8 @@
     padding: 4px 16px calc(var(--nav-h) + 24px + env(safe-area-inset-bottom));
   }
   .loading { text-align: center; margin-top: 48px; }
+  .legal { margin: 32px 0 0; text-align: center; font-size: 0.8rem; }
+  .legal a { color: var(--text-muted); }
   .error { margin-top: 24px; text-align: center; }
   .tabs {
     position: fixed;
